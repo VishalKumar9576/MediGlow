@@ -114,10 +114,13 @@ function OrderDetails() {
         <button
           onClick={downloadInvoice}
           disabled={downloading}
-          className="inline-flex items-center gap-2 rounded-sm bg-[#207a6e] px-2 py-1 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-black px-6 py-2.5 text-sm font-bold text-white shadow-xl transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <Download className="h-4 w-4" />
-          {downloading ? 'Downloading...' : 'Download Invoice'}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#00607a] to-[#207a6e] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <span className="relative flex items-center gap-2">
+            <Download className="h-4 w-4" />
+            {downloading ? 'Preparing PDF...' : 'Download Invoice'}
+          </span>
         </button>
       </div>
 

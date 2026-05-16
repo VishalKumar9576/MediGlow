@@ -221,9 +221,9 @@ function Home() {
 
   const accordionData = [
     {
-      title: "How does DermaWala work?",
+      title: "How does MediGlow work?",
       content:
-        "Backed by leading dermatologists and cutting-edge science, Dermawala's digital health platform is making personalised skincare accessible to all. We craft treatment plans that will work for you, and deliver them at your doorstep. Start an online visit - and enjoy all your skin and hair-related needs at your fingertips!",
+        "Backed by leading dermatologists and cutting-edge science, MediGlow's digital health platform is making personalised skincare accessible to all. We craft treatment plans that will work for you, and deliver them at your doorstep. Start an online visit - and enjoy all your skin and hair-related needs at your fingertips!",
     },
     {
       title: "Why is skin & hair care important?",
@@ -464,7 +464,7 @@ function Home() {
                     tabIndex={0}
                     className="md:mt-6 mt-1 max-w-[220px] md:text-2xl font-bold leading-tight text-[#0f172a] sm:text-4xl cursor-pointer"
                   >
-                    Shop DeramWala Essentials
+                    Shop MediGlow Essentials
                   </h2>
                 </div>
 

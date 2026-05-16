@@ -10,7 +10,7 @@ import {
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import logoImage from "../assets/images/icons/logo1.png";
+import logoImage from "../assets/images/icons/mediglow_logo.png";
 
 function Header() {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -72,18 +72,18 @@ function Header() {
   }, [mobileSearch]);
 
   return (
-    <header className="border-b border-slate-200 bg-white sticky top-0 z-50">
+    <header className="border-b border-slate-200 bg-black sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-3">
         <div className="flex items-center justify-between gap-4">
 
           {/* Logo */}
-          <div className="flex items-center h-12 md:h-15 overflow-hidden">
+          <div className="flex items-center h-16 md:h-20 overflow-hidden">
             <img
               src={logoImage}
-              alt="SkinMart Logo"
+              alt="MediGlow Logo"
               onClick={() => navigate("/")}
               className="cursor-pointer 
-               h-5 md:h-6 
+               h-10 md:h-12 
                w-auto object-contain"
             />
           </div>

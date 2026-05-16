@@ -16,6 +16,7 @@ const createOrder = async (req, res) => {
       console.error("Razorpay keys missing in environment");
       return errorResponse(res, "Payment provider not configured", 500);
     }
+    const { shipping = 0, tax = 0 } = req.body;
     const userId = req.user.id;
     const cartItems = await CartQueries.getCartByUserId(userId);
 
@@ -23,12 +24,15 @@ const createOrder = async (req, res) => {
       return errorResponse(res, "Cart is empty", 400);
     }
 
-    const totalAmount = cartItems.reduce(
+    const itemsSubtotal = cartItems.reduce(
       (total, item) => total + Number(item.price) * Number(item.quantity),
       0,
     );
+    
+    const totalAmount = itemsSubtotal + Number(shipping) + Number(tax);
+    
     console.log(
-      `Creating Razorpay order for user=${userId} items=${cartItems.length} total=${totalAmount}`,
+      `Creating Razorpay order for user=${userId} items=${cartItems.length} subtotal=${itemsSubtotal} shipping=${shipping} tax=${tax} total=${totalAmount}`,
     );
     const amountInPaise = Math.round(totalAmount * 100);
 
@@ -42,6 +46,11 @@ const createOrder = async (req, res) => {
       currency: "INR",
       receipt: `receipt_${userId}_${Date.now()}`,
       payment_capture: 1,
+      notes: {
+        shipping: shipping.toString(),
+        tax: tax.toString(),
+        subtotal: itemsSubtotal.toString()
+      }
     };
 
     const order = await razorpay.orders.create(options);
@@ -80,16 +89,26 @@ const verifyPayment = async (req, res) => {
       return errorResponse(res, "Signature verification failed", 400);
     }
 
+    // 1) Fetch Razorpay order details to get notes (shipping, tax)
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+    const rzpOrder = await razorpay.orders.fetch(razorpay_order_id);
+    const shipping = Number(rzpOrder.notes?.shipping || 0);
+    const tax = Number(rzpOrder.notes?.tax || 0);
+
     // signature valid -> create order in DB from cart
     const cartItems = await CartQueries.getCartByUserId(userId);
     if (!cartItems || cartItems.length === 0) {
       return errorResponse(res, "Cart is empty", 400);
     }
 
-    const totalAmount = cartItems.reduce(
+    const itemsSubtotal = cartItems.reduce(
       (total, item) => total + Number(item.price) * Number(item.quantity),
       0,
     );
+    const totalAmount = itemsSubtotal + shipping + tax;
 
     const orderId = await OrderQueries.createOrder(
       userId,
@@ -99,6 +118,8 @@ const verifyPayment = async (req, res) => {
         quantity: item.quantity,
         price: item.price,
       })),
+      shipping,
+      tax
     );
 
     // mark order completed

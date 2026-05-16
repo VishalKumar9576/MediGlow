@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import { ArrowRight, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import footerLogoImage from "../assets/images/icons/footer1.png";
+import footerLogoImage from "../assets/images/icons/mediglow_logo.png";
 import authBadgeImage from "../assets/images/icons/auth.avif";
 
 function Footer() {
@@ -30,7 +30,7 @@ function Footer() {
       id: "partner-with-us",
       title: "Partner With Us",
       links: [
-        "Sell on DermaWala",
+        "Sell on MediGlow",
         "Doctor Partner",
         "Pharmacy & Retail Partner",
         "UGC Partner Program",
@@ -56,13 +56,13 @@ function Footer() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-20">
               {/* Logo */}
-              <div className="flex items-center h-16 overflow-hidden">
+              <div className="flex items-center h-24 overflow-hidden">
                 <img
                   src={footerLogoImage}
-                  alt="SkinMart Logo"
+                  alt="MediGlow Logo"
                   onClick={() => navigate("/")}
                   className="cursor-pointer 
-               h-25 md:h-6 
+               h-12 md:h-16 
                w-auto object-contain"
                 />
               </div>
@@ -136,7 +136,7 @@ function Footer() {
               </h4>
               <ul className="space-y-3 text-base text-[#aab3d3]">
                 <li className="cursor-pointer transition hover:text-white">
-                  Sell on DermaWala
+                  Sell on MediGlow
                 </li>
                 <li className="cursor-pointer transition hover:text-white">
                   Doctor Partner
@@ -271,7 +271,7 @@ function Footer() {
         {/* Bottom text */}
         <div className="mt-3 pt-2 md:mt-4">
           <p className="text-center md:text-start text-md leading-8 text-[#aab3d3] md:text-md md:leading-10">
-            © 2026, DermaWala. All rights reserved.
+            © 2026, MediGlow. All rights reserved.
           </p>
         </div>
       </div>

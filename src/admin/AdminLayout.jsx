@@ -48,7 +48,7 @@ const AdminLayout = () => {
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <Package size={18} className="text-white" />
             </div>
-            <span className="font-bold text-xl text-gray-800">DermaWala</span>
+            <span className="font-bold text-xl text-gray-800">MediGlow</span>
           </div>
           <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
         </div>

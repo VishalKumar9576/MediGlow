@@ -22,13 +22,13 @@ const normalizeOrders = (orders = []) => {
 };
 
 const OrderQueries = {
-  createOrder: async (userId, totalAmount, items) => {
+  createOrder: async (userId, totalAmount, items, shipping = 0, tax = 0) => {
     const connection = await pool.getConnection();
     await connection.beginTransaction();
     try {
       const [orderResult] = await connection.execute(
-        "INSERT INTO orders (user_id, total_amount) VALUES (?, ?)",
-        [userId, totalAmount],
+        "INSERT INTO orders (user_id, total_amount, shipping_amount, tax_amount) VALUES (?, ?, ?, ?)",
+        [userId, totalAmount, shipping, tax],
       );
       const orderId = orderResult.insertId;
 
@@ -143,7 +143,7 @@ const OrderQueries = {
     if (!orderId) return null;
     const params = [orderId];
     let orderQuery =
-      "SELECT o.id, o.user_id, o.status, o.total_amount, o.created_at, u.full_name as customer_name, u.email as customer_email FROM orders o JOIN users u ON u.id = o.user_id WHERE o.id = ?";
+      "SELECT o.id, o.user_id, o.status, o.total_amount, o.shipping_amount, o.tax_amount, o.created_at, u.full_name as customer_name, u.email as customer_email FROM orders o JOIN users u ON u.id = o.user_id WHERE o.id = ?";
     if (userRole !== "admin") {
       orderQuery += " AND o.user_id = ?";
       params.push(userId);

@@ -1645,7 +1645,7 @@ function Details() {
 
                         <div className="mt-5 border-l-[4px] border-[#d4d4d4] bg-[#f2f2f2] px-3 py-1 md:px-3">
                           <h5 className="text-md font-semibold text-[#2b2b2b] md:text-md">
-                            DermaWala
+                            MediGlow
                           </h5>
                           <p className="mt-1 text-sm leading-[1.7] text-[#343434] md:text-sm">
                             <span className="font-normal">Answer:</span>{" "}
