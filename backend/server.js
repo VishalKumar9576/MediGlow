@@ -20,6 +20,8 @@ const dashboardRoutes = require('./modules/dashboard/routes/dashboard.routes');
 const userRoutes = require('./modules/users/routes/user.routes');
 const blogRoutes = require('./modules/blogs/routes/blogs.routes');
 const paymentRoutes = require('./modules/payments/routes/payments.routes');
+const adminRoutes = require('./modules/admin/routes/admin.routes');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -52,6 +54,8 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
+
 
 // Health check
 app.get('/', (req, res) => {

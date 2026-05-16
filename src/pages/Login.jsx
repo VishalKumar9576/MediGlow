@@ -54,12 +54,12 @@ function Login() {
       <div className="w-full max-w-md rounded-lg px-3 py-4">
         {/* LOGO */}
         <div className="flex justify-center mb-2">
-          <img
-            src="/src/assets/images/icons/logo1.png"
-            alt="Clinikally"
-            className="h-8 object-contain cursor-pointer"
+          <h1 
+            className="text-4xl font-black tracking-tighter text-[#207a6e] cursor-pointer hover:scale-105 transition-transform"
             onClick={() => navigate("/")}
-          />
+          >
+            MEDIGLOW<span className="text-[#00607a]">.</span>
+          </h1>
         </div>
 
         {/* TITLE */}
