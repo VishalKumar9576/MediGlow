@@ -58,18 +58,15 @@ app.use('/api/admin', adminRoutes);
 
 
 // Health check
-app.get('/', (req, res) => {
-    res.send('E-Commerce Backend is running...');
-});
-
-const PORT = Number(process.env.PORT) || 5000;
-
 app.get("/", (req, res) => {
   res.json({
     success: true,
     message: "Backend Running"
   });
 });
+
+
+const PORT = Number(process.env.PORT) || 5000;
 
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
