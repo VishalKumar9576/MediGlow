@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import api from '../api/apiService';
+import toast from 'react-hot-toast';
 import {
   Search,
   Plus,
   Eye,
   Edit,
+  Trash2,
   MoreHorizontal,
   Download,
   ChevronLeft,
@@ -22,6 +24,9 @@ const CustomerPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewCustomer, setViewCustomer] = useState(null);
   const [editCustomer, setEditCustomer] = useState(null);
+  const [addCustomerModal, setAddCustomerModal] = useState(false);
+  const [newCustomer, setNewCustomer] = useState({ name: '', email: '', phone: '', city: '', password: '' });
+  const [actionLoading, setActionLoading] = useState(false);
   const [customerList, setCustomerList] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,6 +49,69 @@ const CustomerPage = () => {
     } catch (err) {
       console.error('Error fetching data:', err);
       setLoading(false);
+    }
+  };
+
+  const handleAddCustomer = async (e) => {
+    e.preventDefault();
+    if (!newCustomer.name || !newCustomer.email) {
+      toast.error('Please fill name and email fields.');
+      return;
+    }
+    try {
+      setActionLoading(true);
+      await api.post('/users', {
+        fullName: newCustomer.name,
+        email: newCustomer.email,
+        phone: newCustomer.phone,
+        city: newCustomer.city,
+        password: newCustomer.password || undefined
+      });
+      toast.success('Customer added successfully!');
+      setAddCustomerModal(false);
+      setNewCustomer({ name: '', email: '', phone: '', city: '', password: '' });
+      fetchCustomers();
+    } catch (err) {
+      console.error('Error adding customer:', err);
+      toast.error(err.response?.data?.message || 'Failed to add customer.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleEditSave = async (e) => {
+    e.preventDefault();
+    try {
+      setActionLoading(true);
+      await api.put(`/users/${editCustomer.id}`, {
+        name: editCustomer.name,
+        email: editCustomer.email,
+        phone: editCustomer.phone,
+        city: editCustomer.city
+      });
+      toast.success('Customer updated successfully!');
+      setEditCustomer(null);
+      fetchCustomers();
+    } catch (err) {
+      console.error('Error updating customer:', err);
+      toast.error(err.response?.data?.message || 'Failed to update customer.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteCustomer = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this customer?')) return;
+    try {
+      setActionLoading(true);
+      await api.delete(`/users/${id}`);
+      toast.success('Customer deleted successfully!');
+      fetchCustomers();
+    } catch (err) {
+      console.error('Error deleting customer:', err);
+      toast.error(err.response?.data?.message || 'Failed to delete customer.');
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -93,6 +161,19 @@ const CustomerPage = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Customer Directory</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage and segment your shop's users</p>
+        </div>
+        <button 
+          onClick={() => setAddCustomerModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition text-sm font-medium shadow-sm cursor-pointer"
+        >
+          <Plus size={16} /> Add New Customer
+        </button>
+      </div>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
         <div className="bg-pink-50/60 rounded-xl p-5 flex items-center justify-between transition-transform hover:scale-105">
@@ -204,7 +285,9 @@ const CustomerPage = () => {
                   <td className="py-3.5 px-5 text-base text-gray-500">{customer.lastOrder}</td>
                   <td className="py-3.5 px-5">
                     <div className="flex items-center justify-center gap-4 ">
-                      <button onClick={() => setViewCustomer(customer)} className="text-gray-600 hover:text-blue-600 transition cursor-pointer"><Eye size={15} /></button>
+                      <button onClick={() => setViewCustomer(customer)} className="text-gray-600 hover:text-blue-600 transition cursor-pointer" title="View Details"><Eye size={15} /></button>
+                      <button onClick={() => setEditCustomer(customer)} className="text-gray-600 hover:text-amber-600 transition cursor-pointer" title="Edit Customer"><Edit size={15} /></button>
+                      <button onClick={() => handleDeleteCustomer(customer.id)} className="text-gray-600 hover:text-red-600 transition cursor-pointer" title="Delete Customer"><Trash2 size={15} /></button>
                     </div>
                   </td>
                 </tr>
@@ -316,7 +399,51 @@ const CustomerPage = () => {
             </div>
             <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100 bg-white">
               <button type="button" onClick={() => setEditCustomer(null)} className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 border border-gray-200 rounded-lg transition cursor-pointer">Cancel</button>
-              <button type="submit" form="editCustomerForm" className="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition cursor-pointer">Save Changes</button>
+              <button type="submit" form="editCustomerForm" disabled={actionLoading} className="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition cursor-pointer disabled:opacity-50">
+                {actionLoading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Customer Modal */}
+      {addCustomerModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-end p-4 bg-black/40 backdrop-blur-sm transition-opacity">
+          <div className="bg-white w-full max-w-sm md:max-w-md rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50">
+              <h2 className="text-xl font-bold text-gray-800">Add New Customer</h2>
+              <button onClick={() => setAddCustomerModal(false)} className="text-gray-400 hover:text-gray-600 transition cursor-pointer">&times;</button>
+            </div>
+            <div className="overflow-y-auto p-6 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              <form id="addCustomerForm" onSubmit={handleAddCustomer} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name *</label>
+                  <input type="text" value={newCustomer.name} onChange={e => setNewCustomer({...newCustomer, name: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. John Doe" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                  <input type="email" value={newCustomer.email} onChange={e => setNewCustomer({...newCustomer, email: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. john@example.com" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                  <input type="text" value={newCustomer.phone} onChange={e => setNewCustomer({...newCustomer, phone: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. 9876543210" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                  <input type="text" value={newCustomer.city} onChange={e => setNewCustomer({...newCustomer, city: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. Delhi" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Password (Optional)</label>
+                  <input type="password" value={newCustomer.password} onChange={e => setNewCustomer({...newCustomer, password: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="Leave empty for default (User@1234)" />
+                </div>
+              </form>
+            </div>
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100 bg-white">
+              <button type="button" onClick={() => setAddCustomerModal(false)} className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 border border-gray-200 rounded-lg transition cursor-pointer">Cancel</button>
+              <button type="submit" form="addCustomerForm" disabled={actionLoading} className="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition cursor-pointer disabled:opacity-50">
+                {actionLoading ? 'Adding...' : 'Add Customer'}
+              </button>
             </div>
           </div>
         </div>

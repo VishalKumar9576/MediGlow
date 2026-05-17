@@ -70,7 +70,7 @@ const AddBrand = ({ onCancel, onSuccess }) => {
               />
               <div className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
                 {brand.image ? (
-                  <img src={brand.image.startsWith('http') ? brand.image : `/${brand.image.replace(/\\/g, '/')}`} alt="Preview" className="w-full h-full object-contain" />
+                  <img src={brand.image.startsWith('http') ? brand.image : (brand.image.startsWith('/') ? brand.image.replace(/\\/g, '/') : `/${brand.image.replace(/\\/g, '/')}`)} alt="Preview" className="w-full h-full object-contain" />
                 ) : (
                   <Upload size={16} className="text-gray-400" />
                 )}

@@ -150,11 +150,11 @@ const CategoriesPage = ({ onAddCategory }) => {
                 {/* Category Image */}
                 <div className="h-36 w-full overflow-hidden relative" style={{ background: cat.color ? `linear-gradient(135deg, ${cat.color}11, ${cat.color}22)` : '#f9fafb' }}>
                   <img
-                    src={cat.image ? (cat.image.startsWith('http') ? cat.image : `/${cat.image.replace(/\\/g, '/')}`) : 'https://placehold.co/400x200?text=No+Image'}
+                    src={cat.image ? (cat.image.startsWith('http') ? cat.image : (cat.image.startsWith('/') ? cat.image.replace(/\\/g, '/') : `/${cat.image.replace(/\\/g, '/')}`)) : 'https://placehold.co/400x200?text=No+Image'}
                     alt={cat.title}
                     className="w-full h-full object-contain p-4 drop-shadow-md"
                     onError={(e) => {
-                      e.currentTarget.src = 'https://placehold.co/400x200?text=Error';0
+                      e.currentTarget.src = 'https://placehold.co/400x200?text=Error';
                     }}
                   />
                   <div className="absolute bottom-0 left-0 right-0 h-1" style={{ backgroundColor: cat.color || '#3b82f6' }}></div>

@@ -446,7 +446,7 @@ const BrandsPage = ({ onAddBrand }) => {
           <div key={brand.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
             <div className="p-4 flex items-center gap-4">
               <div className="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
-                <img src={brand.image ? (brand.image.startsWith('http') ? brand.image : `/${brand.image.replace(/\\/g, '/')}`) : ''} alt={brand.name} className="w-12 h-12 object-contain" onError={(e) => (e.currentTarget.src = 'https://placehold.co/100x100?text=Brand')} />
+                <img src={brand.image ? (brand.image.startsWith('http') ? brand.image : (brand.image.startsWith('/') ? brand.image.replace(/\\/g, '/') : `/${brand.image.replace(/\\/g, '/')}`)) : ''} alt={brand.name} className="w-12 h-12 object-contain" onError={(e) => (e.currentTarget.src = 'https://placehold.co/100x100?text=Brand')} />
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-800">{brand.name}</h3>

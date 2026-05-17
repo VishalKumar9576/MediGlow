@@ -52,6 +52,32 @@ const UserQueries = {
             returningCustomers: returningRes[0].returningCustomers,
             avgOrderValue: Math.round(avgRes[0].avgOrderValue || 0)
         };
+    },
+
+    createUser: async (userData) => {
+        const { fullName, email, password, phone, city } = userData;
+        const [result] = await pool.execute(
+            "INSERT INTO users (full_name, email, password, role, phone, city) VALUES (?, ?, ?, 'user', ?, ?)",
+            [fullName, email, password, phone || null, city || null]
+        );
+        return result.insertId;
+    },
+
+    updateUser: async (id, userData) => {
+        const { name, email, phone, city } = userData;
+        const [result] = await pool.execute(
+            "UPDATE users SET full_name = ?, email = ?, phone = ?, city = ? WHERE id = ? AND role = 'user'",
+            [name, email, phone || null, city || null, id]
+        );
+        return result.affectedRows > 0;
+    },
+
+    deleteUser: async (id) => {
+        const [result] = await pool.execute(
+            "DELETE FROM users WHERE id = ? AND role = 'user'",
+            [id]
+        );
+        return result.affectedRows > 0;
     }
 };
 

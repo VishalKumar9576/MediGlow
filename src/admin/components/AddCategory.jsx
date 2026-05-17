@@ -148,7 +148,7 @@ const AddCategory = ({ onCancel, onSuccess }) => {
               >
                 {formData.image ? (
                   <img 
-                    src={formData.image.startsWith('http') ? formData.image : `/${formData.image.replace(/\\/g, '/')}`} 
+                    src={formData.image.startsWith('http') ? formData.image : (formData.image.startsWith('/') ? formData.image.replace(/\\/g, '/') : `/${formData.image.replace(/\\/g, '/')}`)} 
                     alt="Preview" 
                     className="max-h-full max-w-full object-contain drop-shadow-lg"
                     onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x400?text=Invalid+Image'; }}
