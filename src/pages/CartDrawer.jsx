@@ -150,9 +150,9 @@ function Cart() {
             <div className="h-fit bg-[#f3edf7] px-4 md:px-6 md:mr-4 sticky top-6 rounded-lg">
 
               {/* SAVE BOX */}
-              <div className="rounded-2xl bg-green-50 mt-4 px-4 py-4 text-center text-lg font-medium text-slate-900">
+              {/* <div className="rounded-2xl bg-green-50 mt-4 px-4 py-4 text-center text-lg font-medium text-slate-900">
                 🪙 Wow! Saved ₹{savedAmount} on your order
-              </div>
+              </div> */}
 
               {/* SUBTOTAL */}
               <div className="mt-5 flex justify-between text-lg font-normal">

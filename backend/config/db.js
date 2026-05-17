@@ -2,11 +2,11 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const pool = mysql.createPool({
-    host: 'interchange.proxy.rlwy.net',
-    user: 'root',
-    password: 'VkhxxHYBJLoQLPyVPrtlzgOLWPwfHLud',
-    database: 'railway',
-    port: 45210,
+    host: process.env.DB_HOST || 'interchange.proxy.rlwy.net',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'VkhxxHYBJLoQLPyVPrtlzgOLWPwfHLud',
+    database: process.env.DB_NAME || 'railway',
+    port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 45210,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0

@@ -11,8 +11,11 @@ const OrderQueries = require("../../orders/queries/orders.queries");
 // Create Razorpay order (server-side) — returns order and key id for client checkout
 const createOrder = async (req, res) => {
   try {
+    const keyId = process.env.RAZORPAY_KEY_ID || "rzp_test_SmmBGZKyKQoaFu";
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || "Ac38YyRO6WqiZbOf4fHQkS7E";
+
     // Validate Razorpay keys
-    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+    if (!keyId || !keySecret) {
       console.error("Razorpay keys missing in environment");
       return errorResponse(res, "Payment provider not configured", 500);
     }
@@ -37,8 +40,8 @@ const createOrder = async (req, res) => {
     const amountInPaise = Math.round(totalAmount * 100);
 
     const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET,
+      key_id: keyId,
+      key_secret: keySecret,
     });
 
     const options = {
@@ -55,7 +58,7 @@ const createOrder = async (req, res) => {
 
     const order = await razorpay.orders.create(options);
 
-    return successResponse(res, { order, key: process.env.RAZORPAY_KEY_ID });
+    return successResponse(res, { order, key: keyId });
   } catch (err) {
     console.error(
       "Razorpay createOrder error:",
@@ -68,6 +71,9 @@ const createOrder = async (req, res) => {
 // Verify payment signature sent by client after checkout and create actual order record
 const verifyPayment = async (req, res) => {
   try {
+    const keyId = process.env.RAZORPAY_KEY_ID || "rzp_test_SmmBGZKyKQoaFu";
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || "Ac38YyRO6WqiZbOf4fHQkS7E";
+
     const userId = req.user.id;
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
@@ -77,7 +83,7 @@ const verifyPayment = async (req, res) => {
     }
 
     const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .createHmac("sha256", keySecret)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest("hex");
 
@@ -91,8 +97,8 @@ const verifyPayment = async (req, res) => {
 
     // 1) Fetch Razorpay order details to get notes (shipping, tax)
     const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET,
+      key_id: keyId,
+      key_secret: keySecret,
     });
     const rzpOrder = await razorpay.orders.fetch(razorpay_order_id);
     const shipping = Number(rzpOrder.notes?.shipping || 0);
