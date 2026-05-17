@@ -31,7 +31,7 @@ socketModule.init(server);
 
 // Middleware
 app.use(cors({
-  origin: ["https://medi-glow-2ruvnbjxe-self-taem.vercel.app", "http://localhost:5174"],
+  origin: ["https://medi-glow-2ruvnbjxe-self-team.vercel.app", "http://localhost:5174"],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
   exposedHeaders: ['Content-Range', 'X-Content-Range', 'x-rtb-fingerprint-id', 'request-id'],
