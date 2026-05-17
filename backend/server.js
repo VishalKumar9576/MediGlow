@@ -30,7 +30,9 @@ const server = http.createServer(app);
 socketModule.init(server);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://medi-glow-2ruvnbjxe-self-taem.vercel.app"
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
