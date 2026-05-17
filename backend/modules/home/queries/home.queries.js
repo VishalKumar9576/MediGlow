@@ -15,26 +15,23 @@ async function getProductCardRows(whereClause, params = []) {
 
 const HomeQueries = {
   getHomePayload: async () => {
-    const [categories] = await pool.execute(
-      "SELECT id, title, image FROM categories ORDER BY id",
-    );
-    const [brands] = await pool.execute(
-      "SELECT id, name, image FROM brands ORDER BY id",
-    );
-    const [featureRows] = await pool.execute(
-      "SELECT id, title, subtitle, image_url AS image FROM features ORDER BY id",
-    );
-
-    const [promoBanners] = await pool.execute(
-      "SELECT id, image_url AS image, alt_text AS alt FROM banners WHERE type = ? ORDER BY sort_order, id",
-      ["promo"],
-    );
-    const [dualBanners] = await pool.execute(
-      "SELECT id, image_url AS image, alt_text AS alt FROM banners WHERE type = ? ORDER BY sort_order, id",
-      ["dual"],
-    );
-
-    const [topRows] = await pool.execute(`
+    const [
+      [categories],
+      [brands],
+      [featureRows],
+      [promoBanners],
+      [dualBanners],
+      [topRows],
+      [essRows],
+      [trendRows],
+      [concernList]
+    ] = await Promise.all([
+      pool.execute("SELECT id, title, image FROM categories ORDER BY id"),
+      pool.execute("SELECT id, name, image FROM brands ORDER BY id"),
+      pool.execute("SELECT id, title, subtitle, image_url AS image FROM features ORDER BY id"),
+      pool.execute("SELECT id, image_url AS image, alt_text AS alt FROM banners WHERE type = ? ORDER BY sort_order, id", ["promo"]),
+      pool.execute("SELECT id, image_url AS image, alt_text AS alt FROM banners WHERE type = ? ORDER BY sort_order, id", ["dual"]),
+      pool.execute(`
             SELECT p.id, p.name, p.price, p.old_price AS oldPrice, p.rating, p.review_count AS reviews,
                    p.slug,
                    ${firstImageSql} AS image
@@ -42,9 +39,8 @@ const HomeQueries = {
             JOIN products p ON p.id = h.product_id
             WHERE h.section = 'top_seller'
             ORDER BY h.sort_order
-        `);
-
-    const [essRows] = await pool.execute(`
+        `),
+      pool.execute(`
             SELECT p.id, p.name, p.price, p.old_price AS oldPrice, p.rating, p.review_count,
                    p.slug,
                    p.badge, p.is_doctor_choice AS doctorChoice,
@@ -53,9 +49,8 @@ const HomeQueries = {
             JOIN products p ON p.id = h.product_id
             WHERE h.section = 'essentials'
             ORDER BY h.sort_order
-        `);
-
-    const [trendRows] = await pool.execute(`
+        `),
+      pool.execute(`
             SELECT p.id, p.name, p.price, p.old_price AS oldPrice, p.review_count AS reviews,
                    p.slug,
                    ${firstImageSql} AS image
@@ -63,14 +58,13 @@ const HomeQueries = {
             JOIN products p ON p.id = h.product_id
             WHERE h.section = 'trending'
             ORDER BY h.sort_order
-        `);
+        `),
+      pool.execute("SELECT id, name FROM concerns ORDER BY id")
+    ]);
 
-    const [concernList] = await pool.execute(
-      "SELECT id, name FROM concerns ORDER BY id",
-    );
     const concernProducts = {};
-    for (const c of concernList) {
-      const [cRows] = await pool.execute(
+    const concernQueries = concernList.map(c => 
+      pool.execute(
         `
                 SELECT p.id, p.name, p.price, p.old_price AS oldPrice, p.rating, p.review_count AS reviews,
                       p.slug,
@@ -81,9 +75,12 @@ const HomeQueries = {
                 ORDER BY cp.id
             `,
         [c.id],
-      );
-      concernProducts[c.name] = cRows;
-    }
+      ).then(([cRows]) => {
+        concernProducts[c.name] = cRows;
+      })
+    );
+    
+    await Promise.all(concernQueries);
 
     const concernTabs = concernList.map((c) => c.name);
 

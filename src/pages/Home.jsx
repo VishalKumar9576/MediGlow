@@ -8,6 +8,7 @@ import blogImg1 from "/src/assets/images/blogs/img1.avif";
 import blogImg2 from "/src/assets/images/blogs/img2.avif";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import banner1 from "../assets/images/home/banner1.png";
 
 function Home() {
   const [categories, setCategories] = useState([]);
@@ -287,7 +288,7 @@ function Home() {
       <section>
         <div className="overflow-hidden">
           <img
-            src="src/assets/images/home/banner1.png"
+            src={banner1}
             alt="Hero Banner"
             className="
             w-full
