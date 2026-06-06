@@ -34,6 +34,7 @@ app.use(cors({
   origin: [
     "https://medi-glow-lime.vercel.app",
     "https://medi-glow-qvbgqqm51-self-team.vercel.app",
+    "http://localhost:5173",
     "http://localhost:5174"
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
