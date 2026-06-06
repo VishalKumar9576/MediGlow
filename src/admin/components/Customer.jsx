@@ -118,9 +118,9 @@ const CustomerPage = () => {
   const allCities = [...new Set((customerList || []).map(c => c.city))].filter(Boolean);
 
   const filtered = (customerList || []).filter(c => {
-    const matchSearch = (c.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-                      (c.email || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-                      (c.phone || '').includes(searchTerm);
+    const matchSearch = (c.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.phone || '').includes(searchTerm);
     const matchSegment = segmentFilter === 'all' || c.segment === segmentFilter;
     const matchCity = cityFilter === 'all' || c.city === cityFilter;
     return matchSearch && matchSegment && matchCity;
@@ -166,7 +166,7 @@ const CustomerPage = () => {
           <h1 className="text-2xl font-bold text-gray-800">Customer Directory</h1>
           <p className="text-sm text-gray-500 mt-1">Manage and segment your shop's users</p>
         </div>
-        <button 
+        <button
           onClick={() => setAddCustomerModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition text-sm font-medium shadow-sm cursor-pointer"
         >
@@ -199,8 +199,8 @@ const CustomerPage = () => {
             <div className="flex items-baseline gap-2">
               <p className="text-3xl font-bold text-black">{stats?.returningCustomers?.toLocaleString() || '0'}</p>
               <span className="text-sm text-black">
-                {stats?.totalCustomers > 0 
-                  ? ((stats.returningCustomers / stats.totalCustomers) * 100).toFixed(1) 
+                {stats?.totalCustomers > 0
+                  ? ((stats.returningCustomers / stats.totalCustomers) * 100).toFixed(1)
                   : 0}%
               </span>
             </div>
@@ -373,23 +373,23 @@ const CustomerPage = () => {
               <form id="editCustomerForm" onSubmit={handleEditSave} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
-                  <input type="text" value={editCustomer.name} onChange={e => setEditCustomer({...editCustomer, name: e.target.value, initial: e.target.value.charAt(0).toUpperCase()})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
+                  <input type="text" value={editCustomer.name} onChange={e => setEditCustomer({ ...editCustomer, name: e.target.value, initial: e.target.value.charAt(0).toUpperCase() })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" value={editCustomer.email} onChange={e => setEditCustomer({...editCustomer, email: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
+                  <input type="email" value={editCustomer.email} onChange={e => setEditCustomer({ ...editCustomer, email: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input type="text" value={editCustomer.phone} onChange={e => setEditCustomer({...editCustomer, phone: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
+                  <input type="text" value={editCustomer.phone} onChange={e => setEditCustomer({ ...editCustomer, phone: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                  <input type="text" value={editCustomer.city} onChange={e => setEditCustomer({...editCustomer, city: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
+                  <input type="text" value={editCustomer.city} onChange={e => setEditCustomer({ ...editCustomer, city: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Segment</label>
-                  <select value={editCustomer.segment} onChange={e => setEditCustomer({...editCustomer, segment: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition cursor-pointer">
+                  <select value={editCustomer.segment} onChange={e => setEditCustomer({ ...editCustomer, segment: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition cursor-pointer">
                     <option value="VIP">VIP</option>
                     <option value="Regular">Regular</option>
                     <option value="New">New</option>
@@ -419,23 +419,23 @@ const CustomerPage = () => {
               <form id="addCustomerForm" onSubmit={handleAddCustomer} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name *</label>
-                  <input type="text" value={newCustomer.name} onChange={e => setNewCustomer({...newCustomer, name: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. John Doe" required />
+                  <input type="text" value={newCustomer.name} onChange={e => setNewCustomer({ ...newCustomer, name: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. John Doe" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                  <input type="email" value={newCustomer.email} onChange={e => setNewCustomer({...newCustomer, email: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. john@example.com" required />
+                  <input type="email" value={newCustomer.email} onChange={e => setNewCustomer({ ...newCustomer, email: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. john@example.com" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input type="text" value={newCustomer.phone} onChange={e => setNewCustomer({...newCustomer, phone: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. 9876543210" />
+                  <input type="text" value={newCustomer.phone} onChange={e => setNewCustomer({ ...newCustomer, phone: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. 9876543210" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                  <input type="text" value={newCustomer.city} onChange={e => setNewCustomer({...newCustomer, city: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. Delhi" />
+                  <input type="text" value={newCustomer.city} onChange={e => setNewCustomer({ ...newCustomer, city: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="e.g. Delhi" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Password (Optional)</label>
-                  <input type="password" value={newCustomer.password} onChange={e => setNewCustomer({...newCustomer, password: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="Leave empty for default (User@1234)" />
+                  <input type="password" value={newCustomer.password} onChange={e => setNewCustomer({ ...newCustomer, password: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="Leave empty for default (User@1234)" />
                 </div>
               </form>
             </div>

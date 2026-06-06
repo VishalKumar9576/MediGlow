@@ -33,7 +33,7 @@ socketModule.init(server);
 app.use(cors({
   origin: [
     "https://medi-glow-lime.vercel.app",
-    "https://medi-glow-qvbgqqm51-self-team.vercel.app",
+    "https://medi-glow-hn7625n98-self-taem.vercel.app",
     "http://localhost:5173",
     "http://localhost:5174"
   ],
