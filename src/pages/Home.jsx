@@ -575,8 +575,8 @@ function Home() {
                 key={tab}
                 onClick={() => setActiveConcern(tab)}
                 className={`flex-shrink-0 whitespace-nowrap rounded-lg px-4 py-1 text-sm font-medium transition-all duration-300 cursor-pointer ${activeConcern === tab
-                    ? " text-[#00607a] border border-[#00607a]"
-                    : "border border-gray-300 bg-white text-gray-700"
+                  ? " text-[#00607a] border border-[#00607a]"
+                  : "border border-gray-300 bg-white text-gray-700"
                   }`}
               >
                 {tab}
@@ -777,8 +777,8 @@ function Home() {
 
                       <div
                         className={`grid transition-all duration-300 ease-in-out ${isOpen
-                            ? "grid-rows-[1fr] pt-5 opacity-100"
-                            : "grid-rows-[0fr] pt-0 opacity-0"
+                          ? "grid-rows-[1fr] pt-5 opacity-100"
+                          : "grid-rows-[0fr] pt-0 opacity-0"
                           }`}
                       >
                         <div className="overflow-hidden">
